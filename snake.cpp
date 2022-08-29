@@ -109,9 +109,8 @@ public:
     map->update_map(i, j, BODY);
   }
 
-  void move_head(int direction) {
-    pair<int, int> target = get_target(direction);
-
+  void move_head(int i, int j) {
+    map->update_map(i, j, BODY);
   }
 
   pair<int, int> get_target(int direction) {
@@ -137,6 +136,7 @@ public:
 
   void move_tail() {
     pair<int, int> moved_tail = tail.front();
+    tail.pop();
     map->update_map(moved_tail.first, moved_tail.second, SPACE);
   }
 
@@ -174,7 +174,41 @@ private:
 
 class Game_play {
 public:
+  Game_play(Map* _map, Snake* _snake, Food* _food) {
+    map = _map;
+    snake = _snake;
+    food = _food;
+  }
 
+  int get_move() {
+    char x;
+    cin >> x;
+    return int(x);
+  }
+
+  bool play() {
+    int input = get_move();
+    pair<int, int> target = snake->get_target(input);
+    int i = target.first;
+    int j = target.second;
+
+    if (map->is_dead(i, j)) {
+      return false;
+    }
+
+    if (map->is_food(i, j)) {
+      food->random_food();
+    } else {
+      snake->move_tail();
+    }
+    snake->move_head(i, j);
+    map->print_map();
+    return true;
+  }
+
+  Map* map;
+  Food* food;
+  Snake* snake;
 private:
 
 };
@@ -182,14 +216,15 @@ private:
 int main(int argc, char const *argv[]) {
   srand (time(NULL));
 
-  Map main_map;
-  Snake snake(WIDTH / 2, HEIGHT / 2, &main_map);
-  Food food(&main_map);
-  main_map.print_map();
-  while (true) {
-    char x;
-    cin >> x;
-    main_map.print_map();
+  Map map;
+  Snake snake(WIDTH / 2, HEIGHT / 2, &map);
+  Food food(&map);
+
+  Game_play game_play(&map, &snake, &food);
+  map.print_map();
+  while (game_play.play()) {
+
   }
+  cout << "game over!" << endl;
   return 0;
 }
