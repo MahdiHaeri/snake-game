@@ -17,15 +17,17 @@ using namespace std;
 #define LEFT 97
 #define RIGHT 100
 
-void gotoxy(int x,int y)
-{
-    printf("%c[%d;%df",0x1B,y,x);
+class Food;
+class Snake;
+class Map;
+
+void gotoxy(int x, int y) {
+  printf("%c[%d;%df", 0x1B, y, x);
 }
 
 
 class Map {
 public:
-
   Map() {
     config_map();
   }
@@ -78,15 +80,27 @@ public:
     return false;
   }
 
+  bool is_food(int i, int j) {
+    if (map[i][j] == FOOD) {
+      return true;
+    }
+    return false;
+  }
+
+  bool is_dead(int i, int j) {
+    if (is_wall(i, j) || is_snake(i, j)) {
+      return true;
+    }
+    return false;
+  }
+
 
 private:
   char map[WIDTH][HEIGHT];
-
 };
 
 class Snake {
 public:
-
   Snake(int _i, int _j, Map* _map) {
     i = _i;
     j = _j;
@@ -96,6 +110,11 @@ public:
   }
 
   void move_head(int direction) {
+    pair<int, int> target = get_target(direction);
+
+  }
+
+  pair<int, int> get_target(int direction) {
     tail.push(pair(i, j));
     switch (direction) {
       case UP:
@@ -113,11 +132,11 @@ public:
       default:
         cout << "there is an error in Snake >> move" << endl;
     }
-    map->update_map(i, j, BODY);
+    return pair(i, j);
   }
 
   void move_tail() {
-    pair<int, int> moved_tail = tail.back();
+    pair<int, int> moved_tail = tail.front();
     map->update_map(moved_tail.first, moved_tail.second, SPACE);
   }
 
@@ -170,8 +189,6 @@ int main(int argc, char const *argv[]) {
   while (true) {
     char x;
     cin >> x;
-    snake.move_head(int(x));
-    snake.move_tail();
     main_map.print_map();
   }
   return 0;
