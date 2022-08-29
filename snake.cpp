@@ -1,5 +1,7 @@
 #include <iostream>
 #include <queue>
+#include <random>
+#include <time.h>       /* time */
 
 using namespace std;
 
@@ -7,13 +9,19 @@ using namespace std;
 #define HEIGHT 20
 #define WALL '#'
 #define SPACE ' '
-#define FOOD '+'
+#define FOOD 'f'
 #define BODY '*'
 
 #define UP 119
 #define DOWN 115
 #define LEFT 97
 #define RIGHT 100
+
+void gotoxy(int x,int y)
+{
+    printf("%c[%d;%df",0x1B,y,x);
+}
+
 
 class Map {
 public:
@@ -39,6 +47,7 @@ public:
   }
 
   void print_map() {
+    gotoxy(0, 0);
     for (int j = 0; j < HEIGHT; j++) {
       cout << endl;
       for (int i = 0; i < WIDTH; i++) {
@@ -54,6 +63,21 @@ public:
     }
     return false;
   }
+
+  bool is_snake(int i, int j) {
+    if (map[i][j] == BODY) {
+      return true;
+    }
+    return false;
+  }
+
+  bool is_space(int i, int j) {
+    if (map[i][j] == SPACE) {
+      return true;
+    }
+    return false;
+  }
+
 
 private:
   char map[WIDTH][HEIGHT];
@@ -71,7 +95,7 @@ public:
     map->update_map(i, j, BODY);
   }
 
-  void move(int direction) {
+  void move_head(int direction) {
     tail.push(pair(i, j));
     switch (direction) {
       case UP:
@@ -90,7 +114,6 @@ public:
         cout << "there is an error in Snake >> move" << endl;
     }
     map->update_map(i, j, BODY);
-    move_tail();
   }
 
   void move_tail() {
@@ -110,7 +133,22 @@ private:
 
 class Food {
 public:
+  Food(Map* _map) {
+    map = _map;
+    random_food();
+  }
 
+  void random_food() {
+    do {
+      i = (rand() % WIDTH + 1);
+      j = (rand() % HEIGHT + 1);
+    } while (!map->is_space(i, j));
+    map->update_map(i, j, FOOD);
+  }
+
+  int i;
+  int j;
+  Map* map;
 private:
 
 };
@@ -123,12 +161,17 @@ private:
 };
 
 int main(int argc, char const *argv[]) {
+  srand (time(NULL));
+
   Map main_map;
   Snake snake(WIDTH / 2, HEIGHT / 2, &main_map);
+  Food food(&main_map);
+  main_map.print_map();
   while (true) {
     char x;
     cin >> x;
-    snake.move(int(x));
+    snake.move_head(int(x));
+    snake.move_tail();
     main_map.print_map();
   }
   return 0;
