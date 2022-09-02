@@ -48,15 +48,20 @@ public:
     }
   }
 
-  void print_map() {
+  void print_map(int length) {
     gotoxy(0, 0);
     for (int j = 0; j < HEIGHT; j++) {
       cout << endl;
       for (int i = 0; i < WIDTH; i++) {
-        cout << map[i][j] << map[i][j];
+        if (map[i][j] == BODY) {
+          cout << map[i][j]<< ' ' ;
+        } else {
+          cout << map[i][j] << map[i][j];
+        }
       }
     }
     cout << endl;
+    cout << "length: " << length << endl;
   }
 
   bool is_wall(int i, int j) {
@@ -197,12 +202,13 @@ public:
     }
 
     if (map->is_food(i, j)) {
+      ++snake->length;
       food->random_food();
     } else {
       snake->move_tail();
     }
     snake->move_head(i, j);
-    map->print_map();
+    map->print_map(snake->length);
     return true;
   }
 
@@ -221,7 +227,7 @@ int main(int argc, char const *argv[]) {
   Food food(&map);
 
   Game_play game_play(&map, &snake, &food);
-  map.print_map();
+  map.print_map(snake.length);
   while (game_play.play()) {
 
   }
