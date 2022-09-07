@@ -2,6 +2,8 @@
 #include <queue>
 #include <random>
 #include <time.h>       /* time */
+#include <string>
+
 #include <termios.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
@@ -87,7 +89,8 @@ public:
   }
 
   void print_map(int length) {
-    gotoxy(0, 0);
+    // gotoxy(0, 0);
+    system("clear");
     for (int j = 0; j < HEIGHT; j++) {
       cout << endl;
       for (int i = 0; i < WIDTH; i++) {
@@ -223,15 +226,11 @@ public:
     food = _food;
   }
 
-  int get_move() {
-    char x;
-    cin >> x;
-    return int(x);
-  }
-
   bool play() {
-    int input = get_move();
-    pair<int, int> target = snake->get_target(input);
+    if (kbhit()) {
+      direction = int(getch());
+    }
+    pair<int, int> target = snake->get_target(direction);
     int i = target.first;
     int j = target.second;
 
@@ -253,6 +252,7 @@ public:
   Map* map;
   Food* food;
   Snake* snake;
+  int direction = UP;
 private:
 
 };
@@ -267,7 +267,10 @@ int main(int argc, char const *argv[]) {
   Game_play game_play(&map, &snake, &food);
   map.print_map(snake.length);
   while (game_play.play()) {
-
+    float length = snake.length;
+    float time = 2.0 - (length / 10);
+    cout << time << endl;
+    usleep(time * 100000);
   }
   cout << "game over!" << endl;
   return 0;

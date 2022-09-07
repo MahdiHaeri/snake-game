@@ -42,14 +42,7 @@ int getch(void)
 
 
 int main(int argc, char const *argv[]) {
-  char x;
-  while (true) {
-    if (kbhit()) {
-      x = getch();
-      cout << x;
-      break;
-    }
-    cout << "hello" << endl;
-  }
+  string time = to_string(0.3);
+  cout << time + " mahdi" << endl;
   return 0;
 }
