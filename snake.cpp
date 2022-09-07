@@ -3,6 +3,8 @@
 #include <random>
 #include <time.h>       /* time */
 #include <string>
+#include <stdlib.h>
+
 
 #include <termios.h>
 #include <unistd.h>
@@ -269,7 +271,7 @@ int main(int argc, char const *argv[]) {
   while (game_play.play()) {
     float length = snake.length;
     float time = 2.0 - (length / 10);
-    cout << time << endl;
+    cout <<"speed: " << (length / 10) << endl;
     usleep(time * 100000);
   }
   cout << "game over!" << endl;

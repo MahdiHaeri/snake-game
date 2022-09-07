@@ -43,6 +43,7 @@ int getch(void)
 
 int main(int argc, char const *argv[]) {
   string time = to_string(0.3);
+  cout << "\033[1;31mThis is bold blue text\033[0m\n";
   cout << time + " mahdi" << endl;
   return 0;
 }
