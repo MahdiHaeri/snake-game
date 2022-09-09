@@ -230,7 +230,10 @@ public:
 
   bool play() {
     if (kbhit()) {
-      direction = int(getch());
+      int current_direction = int(getch());
+      if (check_direction(current_direction)) {
+        direction = current_direction;
+      }
     }
     pair<int, int> target = snake->get_target(direction);
     int i = target.first;
@@ -248,6 +251,13 @@ public:
     }
     snake->move_head(i, j);
     map->print_map(snake->length);
+    return true;
+  }
+
+  bool check_direction(int current_direction) {
+    if ((direction == current_direction || direction == UP && current_direction == DOWN) || (direction == DOWN && current_direction == UP) || (direction == LEFT && current_direction == RIGHT) || (direction == RIGHT && current_direction == LEFT)) {
+      return false;
+    }
     return true;
   }
 
