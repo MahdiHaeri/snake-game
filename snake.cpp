@@ -46,9 +46,9 @@ class Map;
 #define __BOLDCYAN    "\033[1m\033[36m"      /* Bold Cyan */
 #define __BOLDWHITE   "\033[1m\033[37m"      /* Bold White */
 
-#define __WALL_COLOR __BOLDWHITE
-#define __FOOD_COLOR __YELLOW
-#define __BODY_COLOR __GREEN
+#define __WALL_COLOR __BOLDYELLOW
+#define __FOOD_COLOR __BOLDRED
+#define __BODY_COLOR __BOLDWHITE
 
 // ----------------------------------- additional function -----------------------------
 
