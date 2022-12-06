@@ -46,6 +46,10 @@ class Map;
 #define __BOLDCYAN    "\033[1m\033[36m"      /* Bold Cyan */
 #define __BOLDWHITE   "\033[1m\033[37m"      /* Bold White */
 
+#define __WALL_COLOR __BOLDWHITE
+#define __FOOD_COLOR __YELLOW
+#define __BODY_COLOR __GREEN
+
 // ----------------------------------- additional function -----------------------------
 
 void gotoxy(int x, int y) {
@@ -114,15 +118,27 @@ public:
     for (int j = 0; j < HEIGHT; j++) {
       cout << endl;
       for (int i = 0; i < WIDTH; i++) {
+        choice_color(map[i][j]);
         if (map[i][j] == BODY) {
-          cout << map[i][j]<< ' ' ;
+          cout << map[i][j] << ' ' ;
         } else {
           cout << map[i][j] << map[i][j];
         }
+        cout << __RESET;
       }
     }
     cout << endl;
     cout << "length: " << length << endl;
+  }
+
+  void choice_color(char character) {
+    if (character == WALL) {
+      cout << __WALL_COLOR;
+    } else if (character == BODY) {
+      cout << __BODY_COLOR;
+    } else if (character == FOOD) {
+      cout << __FOOD_COLOR;
+    }
   }
 
   bool is_wall(int i, int j) {
