@@ -116,7 +116,6 @@ public:
     // gotoxy(0, 0);
     system("clear");
     for (int j = 0; j < HEIGHT; j++) {
-      cout << endl;
       for (int i = 0; i < WIDTH; i++) {
         choice_color(map[i][j]);
         if (map[i][j] == BODY) {
@@ -126,6 +125,7 @@ public:
         }
         cout << __RESET;
       }
+      cout << endl;
     }
     cout << endl;
     cout << "length: " << length << endl;
@@ -312,6 +312,7 @@ private:
 };
 
 int main(int argc, char const *argv[]) {
+  std::cout << "\033[?25l";  // Hide cursor
   srand (time(NULL));
 
   Map map;
@@ -327,5 +328,6 @@ int main(int argc, char const *argv[]) {
     usleep(time * 100000);
   }
   cout << "game over!" << endl;
+  std::cout << "\033[?25h";  // Show cursor (optional)
   return 0;
 }
